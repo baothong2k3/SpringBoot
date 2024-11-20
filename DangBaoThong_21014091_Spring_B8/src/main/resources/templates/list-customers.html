@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer List</title>
+</head>
+<body>
+<h2>CRM - Customer Relationship Manager</h2>
+<input type="button" value="Add Customer" th:onclick="|window.location.href='@{/customer/showFormForAdd}'|"/>
+<table>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Action</th>
+    </tr>
+
+    <!-- Loop over and print our customers -->
+    <tr th:each="tempCustomer : ${customers}">
+        <td th:text="${tempCustomer.firstName}"></td>
+        <td th:text="${tempCustomer.lastName}"></td>
+        <td th:text="${tempCustomer.email}"></td>
+        <td>
+            <!-- Display the update link -->
+            <a th:href="@{/customer/showFormForUpdate(customerId=${tempCustomer.id})}">Update</a>
+            <!-- Display the delete link with confirmation -->
+            <a th:href="@{/customer/delete(customerId=${tempCustomer.id})}"
+               onclick="if (!confirm('Are you sure you want to delete this customer?')) return false">Delete</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List GiangVien</title>
+</head>
+<body>
+<h1>List of GiangVien</h1>
+<br><br>
+<a th:href="@{/giangvien/showFormForAddDeTai}">Add DeTai</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a th:href="@{/giangvien/showFormForAddGiangVien}">Add GiangVien</a>
+<br><br>
+<table>
+    <tr>
+        <th>Giang Vien Name</th>
+        <th>De Tai</th>
+    </tr>
+    <tr th:each="giangVien : ${giangViens}">
+        <td th:text="${giangVien.TENGV}"></td>
+        <td>
+            <ul>
+                <li th:each="deTai : ${deTais[giangVien.TENGV]}">
+                    <a th:href="@{/giangvien/deTai(MADETAI=${deTai.MADETAI})}" th:text="${deTai.TENDT}"></a>
+                </li>
+            </ul>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

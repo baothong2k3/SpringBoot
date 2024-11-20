@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add DeTai</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1>Add New DeTai</h1>
+<form th:action="@{/giangvien/addDeTai}" th:object="${deTai}" method="post" enctype="multipart/form-data">
+    <table>
+        <tr>
+            <td><label for="TENDT">Name:</label></td>
+            <td><input type="text" id="TENDT" th:field="*{TENDT}"/></td>
+            <td th:if="${#fields.hasErrors('TENDT')}" th:errors="*{TENDT}" class="error"></td>
+        </tr>
+        <tr>
+            <td><label for="NAM">Year:</label></td>
+            <td><input type="text" id="NAM" th:field="*{NAM}"/></td>
+            <td th:if="${#fields.hasErrors('NAM')}" th:errors="*{NAM}" class="error"></td>
+        </tr>
+        <tr>
+            <td><label for="MOTADETAI">Description:</label></td>
+            <td><textarea id="MOTADETAI" th:field="*{MOTADETAI}"></textarea></td>
+            <td th:if="${#fields.hasErrors('MOTADETAI')}" th:errors="*{MOTADETAI}" class="error"></td>
+        </tr>
+        <tr>
+            <td><label for="file">Image:</label></td>
+            <td><input type="file" id="file" name="file" /></td>
+        </tr>
+        <tr>
+            <td><label for="giangvienId">GiangVien:</label></td>
+            <td>
+                <select id="giangvienId" name="giangvienId" required>
+                    <option value="" disabled selected>-- Select GiangVien --</option>
+                    <option th:each="giangVien : ${giangViens}"
+                            th:value="${giangVien.MAGV}"
+                            th:text="${giangVien.TENGV}">
+                    </option>
+                </select>
+            </td>
+            <td th:if="${#fields.hasErrors('giangvien')}" th:errors="*{giangvien}" class="error"></td>
+        </tr>
+    </table>
+    <button type="submit">Save</button>
+</form>
+<a th:href="@{/giangvien/list}">Back to List</a>
+</body>
+</html>

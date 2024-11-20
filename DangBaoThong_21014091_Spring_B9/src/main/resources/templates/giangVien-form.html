@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add DeTai</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1>Add New GiangVien</h1>
+<form th:action="@{/giangvien/addGiangVien}" th:object="${giangVien}" method="post">
+    <input type="hidden" th:field="*{MAGV}"/>
+    <table>
+        <tr>
+            <td><label for="TENGV">Ten GV:</label></td>
+            <td><input type="text" id="TENGV" th:field="*{TENGV}"/></td>
+            <td th:if="${#fields.hasErrors('TENGV')}" th:errors="*{TENGV}" class="error"></td>
+        </tr>
+        <tr>
+            <td><label for="LINHVUCNGHIENCUU">LinhVucNghienCuu:</label></td>
+            <td><textarea id="LINHVUCNGHIENCUU" th:field="*{LINHVUCNGHIENCUU}"></textarea></td>
+            <td th:if="${#fields.hasErrors('LINHVUCNGHIENCUU')}" th:errors="*{LINHVUCNGHIENCUU}" class="error"></td>
+        </tr>
+        <tr>
+            <td><label for="DIENTHOAI">Dien Thoai:</label></td>
+            <td><input type="text" id="DIENTHOAI" th:field="*{DIENTHOAI}"/></td>
+            <td th:if="${#fields.hasErrors('DIENTHOAI')}" th:errors="*{DIENTHOAI}" class="error"></td>
+        </tr>
+        <tr>
+            <td><label for="EMAIL">Email:</label></td>
+            <td><input type="text" id="EMAIL" th:field="*{EMAIL}"/></td>
+            <td th:if="${#fields.hasErrors('EMAIL')}" th:errors="*{EMAIL}" class="error"></td>
+        </tr>
+    </table>
+    <br><br>
+    <button type="submit">Save</button>
+    <br><br>
+</form>
+<a th:href="@{/giangvien/list}">Back to List</a>
+</body>
+</html>

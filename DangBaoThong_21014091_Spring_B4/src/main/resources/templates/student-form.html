@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Welcome to Spring Web MVC project</title>
+</head>
+<body>
+<form th:action="@{/student/processForm}" th:object="${student}" method="post">
+  <table>
+    <tr>
+      <td>First Name</td>
+      <td><input type="text" th:field="*{firstName}" /></td>
+    </tr>
+    <tr>
+      <td>Last Name</td>
+      <td><input type="text" th:field="*{lastName}" /></td>
+    </tr>
+    <tr>
+      <td>Country</td>
+      <td>
+        <select th:field="*{country}">
+          <option th:each="option : ${student.countryOptions}"
+                  th:value="${option.key}"
+                  th:text="${option.value}">
+          </option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Favorite Language</td>
+      <td>
+        <div th:each="option : ${student.favoriteLanguageOptions}">
+          <input type="radio" th:field="*{favoriteLanguage}" th:value="${option.key}" />
+          <label th:text="${option.value}"></label>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>Operating Systems</td>
+      <td>
+        <div th:each="option : ${student.operatingSystemOptions}">
+          <input type="checkbox" th:field="*{operatingSystems}" th:value="${option}" />
+          <label th:text="${option}"></label>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit" value="submit" /></td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>

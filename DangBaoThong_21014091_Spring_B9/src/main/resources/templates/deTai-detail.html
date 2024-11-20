@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail DeTai</title>
+</head>
+<body>
+<h1>Detail of DeTai</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <td th:text="${deTai.MADETAI}"></td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td th:text="${deTai.TENDT}"></td>
+    </tr>
+    <tr>
+        <th>Year</th>
+        <td th:text="${deTai.NAM}"></td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td th:text="${deTai.MOTADETAI}"></td>
+    </tr>
+    <tr>
+        <th>Image URL</th>
+        <td th:text="${deTai.URLHINH}"></td>
+    </tr>
+    <tr>
+        <th>GiangVien</th>
+        <td th:text="${deTai.giangvien.TENGV}"></td>
+    </tr>
+</table>
+<br><br>
+<a th:href="@{/giangvien/list}">Back to List</a>
+<form th:action="@{/giangvien/delete}" method="post">
+    <br><br>
+    <input type="hidden" name="MADETAI" th:value="${deTai.MADETAI}" />
+    <button type="submit">Delete</button>
+</form>
+</body>
+</html>
