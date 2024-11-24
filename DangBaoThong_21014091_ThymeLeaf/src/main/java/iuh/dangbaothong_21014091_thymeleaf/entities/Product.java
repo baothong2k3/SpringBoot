@@ -1,7 +1,9 @@
 package iuh.dangbaothong_21014091_thymeleaf.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -13,14 +15,23 @@ public class Product {
     private int id;
 
     @Column(name = "Name")
+    @Size(max = 20, message = "Name must be at most 20 characters")
     private String name;
+
     @Column(name = "Code")
+    @Pattern(regexp = "Pro\\d{3}-(0[1-9]|1[0-2])", message = "Code must follow the pattern ProXXX-MM")
     private String code;
+
     @Column(name = "Description")
+    @NotBlank(message = "Description cannot be empty")
     private String description;
-    @Column(name = "REGISTER_DATE")
-    private LocalDateTime registerDate;
+
+    @Column(name = "REGISTER_DATE", columnDefinition = "date")
+    @Past(message = "Register date must be in the past")
+    private LocalDate registerDate;
+
     @Column(name = "PRICE")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
     private Double price;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,7 +41,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String code, String description, LocalDateTime registerDate, Double price, Catergory catergory) {
+    public Product(String name, String code, String description, LocalDate registerDate, Double price, Catergory catergory) {
         this.name = name;
         this.code = code;
         this.description = description;
@@ -71,11 +82,11 @@ public class Product {
         this.description = description;
     }
 
-    public LocalDateTime getRegisterDate() {
+    public LocalDate getRegisterDate() {
         return registerDate;
     }
 
-    public void setRegisterDate(LocalDateTime registerDate) {
+    public void setRegisterDate(LocalDate registerDate) {
         this.registerDate = registerDate;
     }
 

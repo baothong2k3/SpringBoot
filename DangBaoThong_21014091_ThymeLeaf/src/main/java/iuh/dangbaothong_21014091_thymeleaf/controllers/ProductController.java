@@ -4,6 +4,7 @@ import iuh.dangbaothong_21014091_thymeleaf.entities.Catergory;
 import iuh.dangbaothong_21014091_thymeleaf.entities.Product;
 import iuh.dangbaothong_21014091_thymeleaf.services.CatergoryService;
 import iuh.dangbaothong_21014091_thymeleaf.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +34,7 @@ public class ProductController {
         List<Catergory> categories = catergoryService.findAllCatergories();
         model.addAttribute("categories", categories);
 
-        Pageable pageable = PageRequest.of(page, 1);
+        Pageable pageable = PageRequest.of(page, 10);
         Page<Product> productPage;
         if (categoryId != null) {
             productPage = productService.findProductByCategory(categoryId, pageable);
@@ -41,15 +44,6 @@ public class ProductController {
         model.addAttribute("productPage", productPage);
         model.addAttribute("currentPage", page);
         return "product_list";
-    }
-
-    @GetMapping("/products1")
-    public String listProducts(Model model, @RequestParam(defaultValue = "0") int page) {
-        Pageable pageable = PageRequest.of(page, 1); // 10 products per page
-        Page<Product> productPage = productService.findAllProducts(pageable);
-        model.addAttribute("productPage", productPage);
-        model.addAttribute("currentPage", page);
-        return "product_list1";
     }
 
     @GetMapping("/products/view/{id}")
@@ -62,18 +56,24 @@ public class ProductController {
     @GetMapping("/products/edit/{id}")
     public String editProductForm(@PathVariable("id") int id, Model model) {
         Product product = productService.findProductById(id);
+        System.out.println(product.toString());
         model.addAttribute("product", product);
         return "edit_product";
     }
 
     @PostMapping("/products/edit/{id}")
-    public String editProduct(@PathVariable("id") int id, Product product) {
+    public String editProduct(@Valid @PathVariable("id") int id, Product product, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("product", product);
+            return "edit_product";
+        }
         productService.updateProduct(id, product);
         return "redirect:/products";
     }
 
+
     @GetMapping("/products/delete/{id}")
-    public String deleteProduct(@PathVariable("id") int id) {
+    public String deleteProduct(@Valid @PathVariable("id") int id) {
         productService.delete(id);
         return "redirect:/products";
     }
@@ -81,9 +81,6 @@ public class ProductController {
     @GetMapping("/addProduct")
     public String showAddProductForm(Model model) {
         List<Catergory> categories = catergoryService.findAllCatergories();
-        for (Catergory catergory : categories) {
-            System.out.println(catergory.getName());
-        }
         model.addAttribute("product", new Product());
         model.addAttribute("catergories", categories);
         return "add_product";
@@ -97,7 +94,7 @@ public class ProductController {
 
     @Transactional
     @PostMapping("/products/add")
-    public String addProduct(@ModelAttribute Product product, BindingResult result, Model model,
+    public String addProduct(@Valid @ModelAttribute Product product, BindingResult result, Model model,
                              @RequestParam("catergoryId") Integer catergoryId) {
         List<Catergory> categories = catergoryService.findAllCatergories();
         Catergory catergory = catergoryService.findCatergoryById(catergoryId);
@@ -122,14 +119,18 @@ public class ProductController {
 
     @GetMapping("products/search")
     public String searchProducts(@RequestParam("query") String query, @RequestParam(defaultValue = "0") int page, Model model) {
-        Pageable pageable = PageRequest.of(page, 10); // 10 sản phẩm mỗi trang
-        Page<Product> productPage = productService.searchProduct(query, pageable);
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Product> productPage;
+        try {
+            LocalDate registerDate = LocalDate.parse(query, DateTimeFormatter.ISO_DATE);
+            productPage = productService.findAllByRegisterDate(registerDate, pageable);
+        } catch (Exception e) {
+            productPage = productService.searchProduct(query, pageable);
+        }
 
         model.addAttribute("productPage", productPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("categories", catergoryService.findAllCatergories());
         return "product_list";
     }
-
-
 }

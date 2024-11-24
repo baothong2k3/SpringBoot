@@ -10,24 +10,30 @@
 <br>
 <br>
 <a href="/addCategory">Add New Catergory</a>
+<br>
+<br>
 <form method="get" action="/products">
     <label for="category">Select Category:</label>
     <select id="category" name="categoryId" onchange="this.form.submit()">
         <option value="">--Select Category--</option>
         <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
     </select>
+    <button onclick="window.location.href='/products'">Clear Filter</button>
 </form>
+<br>
 <form method="get" action="/products/search">
     <label for="search">Search Products:</label>
-    <input type="text" id="search" name="query" placeholder="Enter product name or code">
+    <input type="text" id="search" name="query" placeholder="ID, Name, Code, Price or Register Date(yyyy-mm-dd)" size="45">
     <button type="submit">Search</button>
 </form>
+<br>
 <table>
     <thead>
     <tr>
         <th>ID</th>
         <th>Name</th>
         <th>Code</th>
+        <th>Description</th>
         <th>Register Date</th>
         <th>Price</th>
         <th>Actions</th>
@@ -38,6 +44,7 @@
         <td th:text="${product.id}"></td>
         <td th:text="${product.name}"></td>
         <td th:text="${product.code}"></td>
+        <td th:text="${product.description}"></td>
         <td th:text="${product.registerDate}"></td>
         <td th:text="${product.price}"></td>
         <td>
@@ -48,7 +55,7 @@
     </tr>
     </tbody>
 </table>
-
+<br>
 <div>
     <span th:if="${productPage.hasPrevious()}">
         <a th:href="@{/products(page=${currentPage - 1})}">Previous</a>

@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -93,5 +94,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean existsById(int id) {
         return productRepository.existsById(id);
+    }
+
+    @Override
+    public Page<Product> findAllByRegisterDate(LocalDate registerDate, Pageable pageable) {
+        return productRepository.findAllByRegisterDate(registerDate, pageable);
     }
 }

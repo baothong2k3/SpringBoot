@@ -4,6 +4,7 @@ import iuh.dangbaothong_21014091_thymeleaf.entities.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ProductService {
@@ -24,5 +25,7 @@ public interface ProductService {
     public Product findProductById(int id);
 
     public boolean existsById(int id);
+
+    public Page<Product> findAllByRegisterDate(LocalDate registerDate, Pageable pageable);
 
 }

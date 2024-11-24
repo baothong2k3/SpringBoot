@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RepositoryRestResource
@@ -18,6 +19,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             + "LOWER(p.code) LIKE LOWER(CONCAT('%', :keyword, '%')) OR "
             + "CAST(p.price AS string) LIKE %:keyword%")
     Page<Product> search(@Param("keyword") String keyword, Pageable pageable);
+
+    Page<Product> findAllByRegisterDate(LocalDate registerDate, Pageable pageable);
 
     Product findById(int id);
 
