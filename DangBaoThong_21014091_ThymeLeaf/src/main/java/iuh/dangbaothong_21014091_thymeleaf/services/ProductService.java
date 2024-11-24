@@ -17,7 +17,7 @@ public interface ProductService {
 
     public boolean delete(int id);
 
-    public List<Product> searchProduct(String keyword);
+    public Page<Product> searchProduct(String keyword, Pageable pageable);
 
     Page<Product> findProductByCategory(Integer categoryId, Pageable pageable);
 

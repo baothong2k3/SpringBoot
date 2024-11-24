@@ -80,9 +80,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> searchProduct(String keyword) {
-        return productRepository.search(keyword);
+    public Page<Product> searchProduct(String keyword, Pageable pageable) {
+        return productRepository.search(keyword, pageable);
     }
+
 
     @Override
     public Product findProductById(int id) {

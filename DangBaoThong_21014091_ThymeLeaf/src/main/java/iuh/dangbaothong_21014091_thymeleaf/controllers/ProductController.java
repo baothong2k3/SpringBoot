@@ -31,7 +31,7 @@ public class ProductController {
         List<Catergory> categories = catergoryService.findAllCatergories();
         model.addAttribute("categories", categories);
 
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 1);
         Page<Product> productPage;
         if (categoryId != null) {
             productPage = productService.findProductByCategory(categoryId, pageable);
@@ -41,6 +41,15 @@ public class ProductController {
         model.addAttribute("productPage", productPage);
         model.addAttribute("currentPage", page);
         return "product_list";
+    }
+
+    @GetMapping("/products1")
+    public String listProducts(Model model, @RequestParam(defaultValue = "0") int page) {
+        Pageable pageable = PageRequest.of(page, 1); // 10 products per page
+        Page<Product> productPage = productService.findAllProducts(pageable);
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("currentPage", page);
+        return "product_list1";
     }
 
     @GetMapping("/products/view/{id}")
@@ -110,4 +119,17 @@ public class ProductController {
         catergoryService.saveCatergory(catergory);
         return "redirect:/products";
     }
+
+    @GetMapping("products/search")
+    public String searchProducts(@RequestParam("query") String query, @RequestParam(defaultValue = "0") int page, Model model) {
+        Pageable pageable = PageRequest.of(page, 10); // 10 sản phẩm mỗi trang
+        Page<Product> productPage = productService.searchProduct(query, pageable);
+
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("categories", catergoryService.findAllCatergories());
+        return "product_list";
+    }
+
+
 }
